@@ -1,0 +1,52 @@
+1.
+npm install -g create-react-app
+安装淘宝镜像
+npm config set registry https://registry.npm.taobao.org
+create-react-app my-app
+cd my-app
+npm i redux -S
+npm i react-redux -S
+npm i redux-thunk -S
+
+npm i react-router-dom -S
+npm i axios -S
+npm i antd -S
+这一步如果安装不成功，试着换掉淘宝镜像，再进行安装
+npm config set registry http://registry.cnpmjs.org
+再如果不行直接：npm cache clean --force
+npm install react-router-dom
+npm install axios
+npm install antd
+这一步还不行的话，用以下命令：
+npm install antd --save
+2.开发环境依赖
+npm i react-app-rewired -D
+npm i babel-plugin-import -D
+
+3.在根目录下创建config-overrides.js文件:
+const { injectBabelPlugin } = require('react-app-rewired');
+module.exports = function override(config, env) {
+    config = injectBabelPlugin(['import', { libraryName: 'antd', libraryDirectory:'es',style: 'css'}], config);
+    return config;
+};
+4.如果在npm start项目时报错：The "injectBabelPlugin" helper has been deprecated as of v2.0.
+	运行 npm install less-loader
+	     Npm install customize-cra
+  两条
+然后要在根目录下添加个config-overrides.js的文件，内容如下：
+const {
+    override,
+    fixBabelImports,
+    addLessLoader,
+  } = require("customize-cra");
+  
+  module.exports = override(
+    fixBabelImports("import", {
+      libraryName: "antd", libraryDirectory: "es", style: true // change importing css to less
+    }),
+    addLessLoader({
+      javascriptEnabled: true,
+      modifyVars: { "@primary-color": "#1DA57A" }
+    })
+  );
+Link: https://github.com/timarney/react-app-rewired/issues/348
